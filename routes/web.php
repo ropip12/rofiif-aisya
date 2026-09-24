@@ -5,10 +5,18 @@ use App\Http\Controllers\AssetHistoryController;
 use App\Http\Controllers\AssetManagementController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\RiskAssessmentController;
+use App\Http\Controllers\RiskControlController;
+use App\Http\Controllers\RiskController;
+use App\Http\Controllers\RiskIdentificationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return redirect()->route('login');
+    if (auth()->check()) {
+        return redirect()->route('dashboard');
+    }
+
+    return view('auth.login');
 });
 
 Route::middleware('guest')->group(function () {
@@ -22,6 +30,44 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [PageController::class, 'dashboard'])
         ->name('dashboard')
         ->middleware('management:dashboard');
+
+    Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
+        Route::get('/import', [\App\Http\Controllers\AdminImportController::class, 'index'])
+            ->name('import.index')
+            ->middleware('management:admin');
+
+        Route::post('/import', [\App\Http\Controllers\AdminImportController::class, 'store'])
+            ->name('import.store')
+            ->middleware('management:admin');
+
+        Route::get('/pengguna', [\App\Http\Controllers\UserManagementController::class, 'index'])
+            ->name('pengguna.index')
+            ->middleware('management:admin');
+
+        Route::get('/pengguna/create', [\App\Http\Controllers\UserManagementController::class, 'create'])
+            ->name('pengguna.create')
+            ->middleware('management:admin');
+
+        Route::post('/pengguna', [\App\Http\Controllers\UserManagementController::class, 'store'])
+            ->name('pengguna.store')
+            ->middleware('management:admin');
+
+        Route::get('/pengguna/{user}', [\App\Http\Controllers\UserManagementController::class, 'show'])
+            ->name('pengguna.show')
+            ->middleware('management:admin');
+
+        Route::get('/pengguna/{user}/edit', [\App\Http\Controllers\UserManagementController::class, 'edit'])
+            ->name('pengguna.edit')
+            ->middleware('management:admin');
+
+        Route::put('/pengguna/{user}', [\App\Http\Controllers\UserManagementController::class, 'update'])
+            ->name('pengguna.update')
+            ->middleware('management:admin');
+
+        Route::delete('/pengguna/{user}', [\App\Http\Controllers\UserManagementController::class, 'destroy'])
+            ->name('pengguna.destroy')
+            ->middleware('management:admin');
+    });
 
     Route::prefix('aset')->name('aset.')->middleware('management:aset')->group(function () {
         Route::get('/pengadaan', [AssetManagementController::class, 'procurementIndex'])->name('pengadaan.index');
@@ -86,11 +132,139 @@ Route::middleware('auth')->group(function () {
         ->name('management.aset')
         ->middleware('management:aset');
 
-    Route::get('/risiko', [PageController::class, 'risiko'])
+    Route::get('/risiko', [RiskController::class, 'index'])
+        ->name('risiko.index')
+        ->middleware('management:risiko');
+
+    Route::get('/risiko/create', [RiskController::class, 'create'])
+        ->name('risiko.create')
+        ->middleware('management:risiko');
+
+    Route::post('/risiko', [RiskController::class, 'store'])
+        ->name('risiko.store')
+        ->middleware('management:risiko');
+
+    Route::get('/risiko/identifikasi', [RiskIdentificationController::class, 'index'])
+        ->name('risiko.identifikasi')
+        ->middleware('management:risiko');
+
+    Route::put('/risiko/identifikasi/{risiko}', [RiskIdentificationController::class, 'update'])
+        ->name('risiko.identifikasi.update')
+        ->middleware('management:risiko');
+
+    Route::get('/risiko/penilaian', [RiskAssessmentController::class, 'index'])
+        ->name('risiko.penilaian')
+        ->middleware('management:risiko');
+
+    Route::put('/risiko/penilaian/{risiko}', [RiskAssessmentController::class, 'update'])
+        ->name('risiko.penilaian.update')
+        ->middleware('management:risiko');
+
+    Route::get('/risiko/pengendalian', [RiskControlController::class, 'index'])
+        ->name('risiko.pengendalian')
+        ->middleware('management:risiko');
+
+    Route::put('/risiko/pengendalian/{risiko}', [RiskControlController::class, 'update'])
+        ->name('risiko.pengendalian.update')
+        ->middleware('management:risiko');
+
+    Route::get('/risiko/monitoring', [\App\Http\Controllers\RiskMonitoringController::class, 'index'])
+        ->name('risiko.monitoring')
+        ->middleware('management:risiko');
+
+    Route::put('/risiko/monitoring/{risiko}', [\App\Http\Controllers\RiskMonitoringController::class, 'update'])
+        ->name('risiko.monitoring.update')
+        ->middleware('management:risiko');
+
+    Route::get('/risiko/evaluasi', [\App\Http\Controllers\RiskEvaluationController::class, 'index'])
+        ->name('risiko.evaluasi')
+        ->middleware('management:risiko');
+
+    Route::put('/risiko/evaluasi/{risiko}', [\App\Http\Controllers\RiskEvaluationController::class, 'update'])
+        ->name('risiko.evaluasi.update')
+        ->middleware('management:risiko');
+
+    Route::get('/risiko/laporan', [\App\Http\Controllers\RiskReportController::class, 'index'])
+        ->name('risiko.laporan')
+        ->middleware('management:risiko');
+
+    Route::get('/risiko/{risiko}', [RiskController::class, 'show'])
+        ->name('risiko.show')
+        ->middleware('management:risiko');
+
+    Route::get('/risiko/{risiko}/edit', [RiskController::class, 'edit'])
+        ->name('risiko.edit')
+        ->middleware('management:risiko');
+
+    Route::put('/risiko/{risiko}', [RiskController::class, 'update'])
+        ->name('risiko.update')
+        ->middleware('management:risiko');
+
+    Route::delete('/risiko/{risiko}', [RiskController::class, 'destroy'])
+        ->name('risiko.destroy')
+        ->middleware('management:risiko');
+
+    Route::get('/risiko-page', [PageController::class, 'risiko'])
         ->name('management.risiko')
         ->middleware('management:risiko');
 
-    Route::get('/layanan', [PageController::class, 'layanan'])
+    Route::get('/layanan', [\App\Http\Controllers\ServiceController::class, 'index'])
+        ->name('layanan.index')
+        ->middleware('management:layanan');
+
+    Route::get('/layanan/create', [\App\Http\Controllers\ServiceController::class, 'create'])
+        ->name('layanan.create')
+        ->middleware('management:layanan');
+
+    Route::post('/layanan', [\App\Http\Controllers\ServiceController::class, 'store'])
+        ->name('layanan.store')
+        ->middleware('management:layanan');
+
+    Route::get('/layanan/pengelolaan', [\App\Http\Controllers\ServiceManagementController::class, 'index'])
+        ->name('layanan.pengelolaan')
+        ->middleware('management:layanan');
+
+    Route::put('/layanan/pengelolaan/{service}', [\App\Http\Controllers\ServiceManagementController::class, 'update'])
+        ->name('layanan.pengelolaan.update')
+        ->middleware('management:layanan');
+
+    Route::get('/layanan/monitoring', [\App\Http\Controllers\ServiceMonitoringController::class, 'index'])
+        ->name('layanan.monitoring')
+        ->middleware('management:layanan');
+
+    Route::put('/layanan/monitoring/{service}', [\App\Http\Controllers\ServiceMonitoringController::class, 'update'])
+        ->name('layanan.monitoring.update')
+        ->middleware('management:layanan');
+
+    Route::get('/layanan/evaluasi', [\App\Http\Controllers\ServiceEvaluationController::class, 'index'])
+        ->name('layanan.evaluasi')
+        ->middleware('management:layanan');
+
+    Route::put('/layanan/evaluasi/{service}', [\App\Http\Controllers\ServiceEvaluationController::class, 'update'])
+        ->name('layanan.evaluasi.update')
+        ->middleware('management:layanan');
+
+    Route::get('/layanan/laporan', [\App\Http\Controllers\ServiceReportController::class, 'index'])
+        ->name('layanan.laporan')
+        ->middleware('management:layanan');
+
+    Route::get('/layanan/{service}', [\App\Http\Controllers\ServiceController::class, 'show'])
+        ->name('layanan.show')
+        ->middleware('management:layanan');
+
+    Route::get('/layanan/{service}/edit', [\App\Http\Controllers\ServiceController::class, 'edit'])
+        ->name('layanan.edit')
+        ->middleware('management:layanan');
+
+    Route::put('/layanan/{service}', [\App\Http\Controllers\ServiceController::class, 'update'])
+        ->name('layanan.update')
+        ->middleware('management:layanan');
+
+    Route::delete('/layanan/{service}', [\App\Http\Controllers\ServiceController::class, 'destroy'])
+        ->name('layanan.destroy')
+        ->middleware('management:layanan');
+
+    Route::get('/layanan-page', [PageController::class, 'layanan'])
         ->name('management.layanan')
         ->middleware('management:layanan');
 });

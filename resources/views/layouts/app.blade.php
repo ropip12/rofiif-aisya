@@ -329,27 +329,28 @@
                     <div class="nav-label">Manajemen Risiko</div>
                     <a href="{{ route('management.risiko') }}" class="nav-item {{ request()->is('risiko') ? 'active' : '' }}">Risiko</a>
                     <div class="nav-submenu">
-                        <span class="nav-subitem is-placeholder">Data Risiko</span>
-                        <span class="nav-subitem is-placeholder">Identifikasi</span>
-                        <span class="nav-subitem is-placeholder">Penilaian</span>
-                        <span class="nav-subitem is-placeholder">Pengendalian</span>
-                        <span class="nav-subitem is-placeholder">Monitoring</span>
-                        <span class="nav-subitem is-placeholder">Evaluasi</span>
-                        <span class="nav-subitem is-placeholder">Laporan</span>
+                        <a href="{{ route('risiko.index') }}" class="nav-subitem {{ request()->is('risiko') ? 'active' : '' }}">Data Risiko</a>
+                        <a href="{{ route('risiko.identifikasi') }}" class="nav-subitem {{ request()->is('risiko/identifikasi*') ? 'active' : '' }}">Identifikasi</a>
+                        <a href="{{ route('risiko.penilaian') }}" class="nav-subitem {{ request()->is('risiko/penilaian*') ? 'active' : '' }}">Penilaian</a>
+                        <a href="{{ route('risiko.pengendalian') }}" class="nav-subitem {{ request()->is('risiko/pengendalian*') ? 'active' : '' }}">Pengendalian</a>
+                        <a href="{{ route('risiko.monitoring') }}" class="nav-subitem {{ request()->is('risiko/monitoring*') ? 'active' : '' }}">Monitoring</a>
+                        <a href="{{ route('risiko.evaluasi') }}" class="nav-subitem {{ request()->is('risiko/evaluasi*') ? 'active' : '' }}">Evaluasi</a>
+                        <a href="{{ route('risiko.laporan') }}" class="nav-subitem {{ request()->is('risiko/laporan*') ? 'active' : '' }}">Laporan</a>
                     </div>
 
                     <div class="nav-label">Manajemen Layanan</div>
-                    <a href="{{ route('management.layanan') }}" class="nav-item {{ request()->is('layanan') ? 'active' : '' }}">Layanan</a>
+                    <a href="{{ route('layanan.index') }}" class="nav-item {{ request()->is('layanan') || request()->is('layanan/*') ? 'active' : '' }}">Layanan</a>
                     <div class="nav-submenu">
-                        <span class="nav-subitem is-placeholder">Data Layanan</span>
-                        <span class="nav-subitem is-placeholder">Pengelolaan</span>
-                        <span class="nav-subitem is-placeholder">Monitoring</span>
-                        <span class="nav-subitem is-placeholder">Evaluasi</span>
-                        <span class="nav-subitem is-placeholder">Laporan</span>
+                        <a href="{{ route('layanan.index') }}" class="nav-subitem {{ request()->is('layanan') || request()->is('layanan/*') && !request()->is('layanan/pengelolaan*') && !request()->is('layanan/monitoring*') && !request()->is('layanan/evaluasi*') && !request()->is('layanan/laporan*') ? 'active' : '' }}">Data Layanan</a>
+                        <a href="{{ route('layanan.pengelolaan') }}" class="nav-subitem {{ request()->is('layanan/pengelolaan*') ? 'active' : '' }}">Pengelolaan</a>
+                        <a href="{{ route('layanan.monitoring') }}" class="nav-subitem {{ request()->is('layanan/monitoring*') ? 'active' : '' }}">Monitoring</a>
+                        <a href="{{ route('layanan.evaluasi') }}" class="nav-subitem {{ request()->is('layanan/evaluasi*') ? 'active' : '' }}">Evaluasi</a>
+                        <a href="{{ route('layanan.laporan') }}" class="nav-subitem {{ request()->is('layanan/laporan*') ? 'active' : '' }}">Laporan</a>
                     </div>
 
                     <div class="nav-label">Pengaturan</div>
-                    <a href="{{ route('dashboard') }}" class="nav-item">Manajemen Pengguna</a>
+                    <a href="{{ route('admin.import.index') }}" class="nav-item {{ request()->is('admin/import*') ? 'active' : '' }}">Import Data Excel</a>
+                    <a href="{{ route('admin.pengguna.index') }}" class="nav-item {{ request()->is('admin/pengguna*') ? 'active' : '' }}">Manajemen Pengguna</a>
                     <form method="POST" action="{{ route('logout') }}" style="margin: 10px 0 0;">
                         @csrf
                         <button type="submit" class="logout-btn" style="width: 100%; text-align: left;">Logout</button>
@@ -383,14 +384,14 @@
                     <div class="nav-label">Menu</div>
                     <a href="{{ route('dashboard') }}" class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}">Dashboard</a>
                     <div class="nav-label">Risiko</div>
-                    <a href="{{ route('management.risiko') }}" class="nav-item {{ request()->is('risiko') ? 'active' : '' }}">Data Risiko</a>
+                    <a href="{{ route('risiko.index') }}" class="nav-item {{ request()->is('risiko') ? 'active' : '' }}">Data Risiko</a>
                     <div class="nav-submenu">
-                        <span class="nav-subitem is-placeholder">Identifikasi</span>
-                        <span class="nav-subitem is-placeholder">Penilaian</span>
-                        <span class="nav-subitem is-placeholder">Pengendalian</span>
-                        <span class="nav-subitem is-placeholder">Monitoring</span>
-                        <span class="nav-subitem is-placeholder">Evaluasi</span>
-                        <span class="nav-subitem is-placeholder">Laporan</span>
+                        <a href="{{ route('risiko.identifikasi') }}" class="nav-subitem {{ request()->is('risiko/identifikasi*') ? 'active' : '' }}">Identifikasi</a>
+                        <a href="{{ route('risiko.penilaian') }}" class="nav-subitem {{ request()->is('risiko/penilaian*') ? 'active' : '' }}">Penilaian</a>
+                        <a href="{{ route('risiko.pengendalian') }}" class="nav-subitem {{ request()->is('risiko/pengendalian*') ? 'active' : '' }}">Pengendalian</a>
+                        <a href="{{ route('risiko.monitoring') }}" class="nav-subitem {{ request()->is('risiko/monitoring*') ? 'active' : '' }}">Monitoring</a>
+                        <a href="{{ route('risiko.evaluasi') }}" class="nav-subitem {{ request()->is('risiko/evaluasi*') ? 'active' : '' }}">Evaluasi</a>
+                        <a href="{{ route('risiko.laporan') }}" class="nav-subitem {{ request()->is('risiko/laporan*') ? 'active' : '' }}">Laporan</a>
                     </div>
                     <form method="POST" action="{{ route('logout') }}" style="margin: 10px 0 0;">
                         @csrf
@@ -402,12 +403,12 @@
                     <div class="nav-label">Menu</div>
                     <a href="{{ route('dashboard') }}" class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}">Dashboard</a>
                     <div class="nav-label">Layanan</div>
-                    <a href="{{ route('management.layanan') }}" class="nav-item {{ request()->is('layanan') ? 'active' : '' }}">Data Layanan</a>
+                    <a href="{{ route('layanan.index') }}" class="nav-item {{ request()->is('layanan') || request()->is('layanan/*') ? 'active' : '' }}">Data Layanan</a>
                     <div class="nav-submenu">
-                        <span class="nav-subitem is-placeholder">Pengelolaan</span>
-                        <span class="nav-subitem is-placeholder">Monitoring</span>
-                        <span class="nav-subitem is-placeholder">Evaluasi</span>
-                        <span class="nav-subitem is-placeholder">Laporan</span>
+                        <a href="{{ route('layanan.pengelolaan') }}" class="nav-subitem {{ request()->is('layanan/pengelolaan*') ? 'active' : '' }}">Pengelolaan</a>
+                        <a href="{{ route('layanan.monitoring') }}" class="nav-subitem {{ request()->is('layanan/monitoring*') ? 'active' : '' }}">Monitoring</a>
+                        <a href="{{ route('layanan.evaluasi') }}" class="nav-subitem {{ request()->is('layanan/evaluasi*') ? 'active' : '' }}">Evaluasi</a>
+                        <a href="{{ route('layanan.laporan') }}" class="nav-subitem {{ request()->is('layanan/laporan*') ? 'active' : '' }}">Laporan</a>
                     </div>
                     <form method="POST" action="{{ route('logout') }}" style="margin: 10px 0 0;">
                         @csrf

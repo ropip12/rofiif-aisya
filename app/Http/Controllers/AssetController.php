@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Asset;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class AssetController extends Controller
@@ -83,33 +84,29 @@ class AssetController extends Controller
         return redirect()->route('aset.index')->with('success', 'Data aset berhasil ditambahkan.');
     }
 
-    public function show(Request $request, Asset $asset): View
+    public function show(Request $request, Asset $aset): View
     {
         $user = $request->user();
         abort_unless($user && ($user->isAdmin() || $user->management === 'aset'), 403, 'Akses ditolak untuk data aset.');
 
-        return view('assets.show', compact('asset'));
+        return view('assets.show', compact('aset'));
     }
 
-    public function edit(Request $request, Asset $asset): View
+    public function edit(Request $request, Asset $aset): View
     {
         $user = $request->user();
         abort_unless($user && ($user->isAdmin() || $user->management === 'aset'), 403, 'Akses ditolak untuk data aset.');
 
-        return view('assets.edit', compact('asset'));
+        return view('assets.edit', compact('aset'));
     }
 
-    public function update(Request $request, Asset $asset): RedirectResponse
+    public function update(Request $request, Asset $aset): RedirectResponse
     {
         $user = $request->user();
         abort_unless($user && ($user->isAdmin() || $user->management === 'aset'), 403, 'Akses ditolak untuk data aset.');
 
         $validated = $request->validate([
-            'asset_code' => ['required', 'string', 'max:255', function ($attribute, $value, $fail) use ($asset) {
-                if (Asset::where('asset_code', $value)->whereKeyNot($asset->id)->exists()) {
-                    $fail('The asset code has already been taken.');
-                }
-            }],
+            'asset_code' => ['required', 'string', 'max:255', Rule::unique('assets', 'asset_code')->ignore($aset->id)],
             'asset_name' => ['required', 'string', 'max:255'],
             'asset_classification' => ['required', 'string', 'max:255'],
             'acquisition_date' => ['nullable', 'date'],
@@ -125,17 +122,17 @@ class AssetController extends Controller
             'final_handling' => ['nullable', 'string'],
         ]);
 
-        $asset->update($validated);
+        $aset->update($validated);
 
-        return redirect()->route('aset.show', ['aset' => $asset->id])->with('success', 'Data aset berhasil diperbarui.');
+        return redirect()->route('aset.show', ['aset' => $aset->id])->with('success', 'Data aset berhasil diperbarui.');
     }
 
-    public function destroy(Request $request, Asset $asset): RedirectResponse
+    public function destroy(Request $request, Asset $aset): RedirectResponse
     {
         $user = $request->user();
         abort_unless($user && ($user->isAdmin() || $user->management === 'aset'), 403, 'Akses ditolak untuk data aset.');
 
-        $asset->delete();
+        $aset->delete();
 
         return redirect()->route('aset.index')->with('success', 'Data aset berhasil dihapus.');
     }
